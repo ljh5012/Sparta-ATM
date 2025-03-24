@@ -192,6 +192,15 @@ public class PopupBank : MonoBehaviour
             UserData newUser = new UserData(name, 50000, 100000, signupId, signupPw);
             // 유저 리스트 로드
             UserDataList userList = GameManager.Instance.LoadAllUsers();
+            //  중복 ID 검사
+            foreach (UserData user in userList.users)
+            {
+                if (user.UserId == signupId)
+                {
+                    Debug.Log("이미 존재하는 ID입니다.");
+                    return; // 회원가입 막기
+                }
+            }
             userList.users.Add(newUser);
 
             // 저장
