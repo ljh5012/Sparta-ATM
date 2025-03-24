@@ -16,6 +16,8 @@ public class WithdrawUI : PopupBank
 
     public TMP_InputField inputField;
 
+    UserDataList userList;
+
     public void Start()
     {
         backButton.onClick.AddListener(OnClickAtmUI);
@@ -71,7 +73,19 @@ public class WithdrawUI : PopupBank
             GameManager.Instance.userData.Balance -= amount;
             GameManager.Instance.userData.Cash += amount;
             GameManager.Instance.UpdateUI();
-            GameManager.Instance.SaveUserData();
+            UserDataList userList = GameManager.Instance.LoadAllUsers();
+
+            foreach (UserData user in userList.users)
+            {
+                if (user.UserId == GameManager.Instance.userData.UserId)
+                {
+                    user.Balance = GameManager.Instance.userData.Balance;
+                    user.Cash = GameManager.Instance.userData.Cash;
+                    break;
+                }
+            }
+
+            GameManager.Instance.SaveAllUsers(userList);
         }
         else
         {
