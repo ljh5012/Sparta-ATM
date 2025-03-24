@@ -14,6 +14,7 @@ public class PopupBank : MonoBehaviour
     public GameObject loginUI;
     public GameObject popupUI;
     public GameObject signupUI;
+    public GameObject sendUI;
 
     public GameManager gameManager;
 
@@ -21,6 +22,7 @@ public class PopupBank : MonoBehaviour
     public Button signupBtn;
     public Button cancelBtn;
     public Button signup2Btn;
+    public Button sendBtn;
 
     public TMP_InputField IdInputField;
     public TMP_InputField signupIdInputField;
@@ -28,6 +30,8 @@ public class PopupBank : MonoBehaviour
     public TMP_InputField signupPwInputField;
     public TMP_InputField signupPw2InputField;
     public TMP_InputField nameInputField;
+    public TMP_InputField targetInputField;
+    public TMP_InputField amountInputField;
 
     bool isID;
     bool isPW;
@@ -68,11 +72,24 @@ public class PopupBank : MonoBehaviour
         atmUI.SetActive(true);
         depositUI.SetActive(false);
         withdrawUI.SetActive(false);
+        
     }
 
     public void OnClickWarningOff()
     {
         warningUI.SetActive(false);
+    }
+
+    public void OnClickSendUI()
+    {
+        atmUI.SetActive(false);
+        sendUI.SetActive(true);
+    }
+
+    public void SendUIOff()
+    {
+        atmUI.SetActive(true);
+        sendUI.SetActive(false);
     }
 
     public void PopupLogin()
@@ -215,5 +232,72 @@ public class PopupBank : MonoBehaviour
             
         }
 
+    }
+
+    public void SendMoney()
+    {
+        string targetId = targetInputField.text;
+        string amountText = amountInputField.text;
+        int amount;
+
+        if (!int.TryParse(amountText, out amount) || amount <= 0)
+        {
+            Debug.Log("금액을 숫자로 올바르게 입력하세요.");
+            return;
+        }
+
+        UserData sender = GameManager.Instance.userData;
+
+        if (sender.Balance < amount)
+        {
+            Debug.Log("잔액이 부족합니다.");
+            warningUI.SetActive(true); // UI 경고창
+            return;
+        }
+
+        // 유저 목록 불러오기
+        UserDataList userList = GameManager.Instance.LoadAllUsers();
+
+        // 받는 사람 찾기
+        UserData receiver = null;
+        foreach (UserData user in userList.users)
+        {
+            if (user.UserId == targetId)
+            {
+                receiver = user;
+                break;
+            }
+        }
+
+        if (receiver == null)
+        {
+            Debug.Log("해당 ID를 가진 유저가 존재하지 않습니다.");
+            return;
+        }
+
+        // 송금 처리
+        sender.Balance -= amount;
+
+        // 본인의 userData도 userList에서 찾아서 값 업데이트
+        foreach (UserData user in userList.users)
+        {
+            if (user.UserId == sender.UserId)
+            {
+                user.Balance = sender.Balance;
+                break;
+            }
+        }
+
+        receiver.Balance += amount;
+
+        GameManager.Instance.SaveAllUsers(userList);
+        GameManager.Instance.UpdateUI();
+
+        Debug.Log($"송금 완료: {targetId}에게 {amount}원 보냄");
+
+        targetInputField.text = "";
+        amountInputField.text = "";
+
+        SendUIOff();
     }
 }
