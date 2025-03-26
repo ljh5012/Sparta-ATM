@@ -24,6 +24,7 @@ Enter Text에 원하는 금액을 직접 입력하여 출금 가능
 ![image](https://github.com/user-attachments/assets/090871d2-adba-4f5b-9394-adb910a33d48)
 
 ID, 이름, Password를 입력하여 회원가입 가능
+
 ![image](https://github.com/user-attachments/assets/6be6ab13-876a-4af6-9cbb-855a911e8c50)
 
 가입한 ID로 로그인 시 메인화면으로 전환
