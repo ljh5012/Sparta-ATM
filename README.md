@@ -10,8 +10,8 @@
 
 # 입금
 ![image](https://github.com/user-attachments/assets/ab9f4b3c-b74d-4e77-93e2-404eccaa2781)
-10000, 30000, 50000 버튼을 클릭하면 그 금액만큼 자동으로 입금
-Enter Text에 원하는 금액을 직접 입력하여 입금 가능
+  10000, 30000, 50000 버튼을 클릭하면 그 금액만큼 자동으로 입금
+  Enter Text에 원하는 금액을 직접 입력하여 입금 가능
 
 # 출금
 ![image](https://github.com/user-attachments/assets/1490d2f9-429b-4c69-8a38-7a8189db2d1f)
